@@ -1,0 +1,31 @@
+<resources>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+
+    <dimen name="recycle_view_item_padding">12dp</dimen>
+
+    <dimen name="recycle_view_item_height">180dp</dimen>
+    <!-- Below three should add to above -->
+    <dimen name="recycle_view_item_title_height">60dp</dimen>
+    <dimen name="recycle_view_item_body_height">60dp</dimen>
+    <dimen name="recycle_view_item_icons_height">60dp</dimen>
+
+    <dimen name="recycle_view_generic_height">60dp</dimen>
+    <dimen name="recycle_view_item_padding_top">16dp</dimen>
+    <dimen name="recycle_view_item_padding_bottom">8dp</dimen>
+    <dimen name="recycle_view_item_padding_left">16dp</dimen>
+    <dimen name="recycle_view_item_padding_right">8dp</dimen>
+
+    <dimen name="recycle_view_item_title_text_size">24sp</dimen>
+    <dimen name="recycle_view_item_body_text_size">24sp</dimen>
+
+    <dimen name="reading_dialog_time_text_size">18sp</dimen>
+    <dimen name="reading_dialog_symptoms_text_size">18sp</dimen>
+
+    <dimen name="time_image_height">48dp</dimen>
+    <dimen name="sort_image_height">48dp</dimen>
+    <dimen name="sort_image_text_size">36sp</dimen>
+    <dimen name="export_image_height">40dp</dimen>
+    <dimen name="export_image_text_size">36sp</dimen>
+</resources>

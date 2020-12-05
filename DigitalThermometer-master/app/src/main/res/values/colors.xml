@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
+    <color name="colorNegativeReading">#90EE90</color>
+    <color name="colorPositiveReading">#CD5C5C</color>
+    <color name="colorSymptomsDialog">#3E80B4</color>
+    <color name="highTempDatabaseEntry">#CD5C5C</color>
+    <color name="lightGrayDatabaseEntry">#C0C0C0</color>
+    <color name="darkGrayDatabaseEntry">#808080</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+</resources>

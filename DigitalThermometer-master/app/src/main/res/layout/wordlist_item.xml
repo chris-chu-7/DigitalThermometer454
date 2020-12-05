@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="12dp"
+    android:layout_marginBottom="@dimen/text_margin"
+    android:layout_gravity="center_horizontal">
+
+    <include layout="@layout/reading_database_item"/>
+
+    <!--
+    <TextView
+        android:id="@+id/word"
+        android:height="@dimen/app_bar_height"
+        android:background="@drawable/border"
+        android:layout_gravity="center"
+        android:paddingBottom="@dimen/recycle_view_item_padding_bottom"
+        android:paddingLeft="@dimen/recycle_view_item_padding_left"
+        android:paddingStart="@dimen/recycle_view_item_padding_left"
+        android:paddingRight="@dimen/recycle_view_item_padding_right"
+        android:paddingEnd="@dimen/recycle_view_item_padding_right"
+        android:paddingTop="@dimen/recycle_view_item_padding_top"
+        style="@style/reading" />
+    -->
+</LinearLayout>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/recycle_view_item_height"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/titleEntry"
+        android:layout_height="@dimen/recycle_view_item_title_height"
+        android:textSize="@dimen/recycle_view_item_title_text_size"
+        android:textStyle="normal"
+        android:layout_gravity="top"
+        android:paddingBottom="@dimen/recycle_view_item_padding_bottom"
+        android:paddingLeft="@dimen/recycle_view_item_padding_left"
+        android:paddingStart="@dimen/recycle_view_item_padding_left"
+        android:paddingRight="@dimen/recycle_view_item_padding_right"
+        android:paddingEnd="@dimen/recycle_view_item_padding_right"
+        android:paddingTop="@dimen/recycle_view_item_padding_top"
+        style="@style/reading" />
+
+    <TextView
+        android:id="@+id/bodyEntry"
+        android:layout_height="@dimen/recycle_view_item_body_height"
+        android:layout_gravity="center"
+        android:textStyle="normal"
+        android:textSize="@dimen/recycle_view_item_body_text_size"
+        android:paddingBottom="@dimen/recycle_view_item_padding_bottom"
+        android:paddingLeft="@dimen/recycle_view_item_padding_left"
+        android:paddingStart="@dimen/recycle_view_item_padding_left"
+        android:paddingRight="@dimen/recycle_view_item_padding_right"
+        android:paddingEnd="@dimen/recycle_view_item_padding_right"
+        android:paddingTop="@dimen/recycle_view_item_padding_top"
+        style="@style/reading" />
+
+    <!-- Buttons for each data element -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/recycle_view_item_icons_height"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom">
+
+        <ImageButton
+            android:id="@+id/moreInfoEntry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/moreinfo"
+            android:contentDescription="@string/more_info"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"/>
+
+        <ImageButton
+            android:id="@+id/exportEntry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/export"
+            android:contentDescription="@string/export_alone"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true"/>
+
+        <ImageButton
+            android:id="@+id/editEntry"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:srcCompat="@drawable/edit"
+            android:contentDescription="@string/edit"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true" />
+
+    </LinearLayout>
+
+</LinearLayout>
