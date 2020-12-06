@@ -2,6 +2,13 @@ package com.example.digitalthermometer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.flir.thermalsdk.androidsdk.image.BitmapAndroid;
+import com.flir.thermalsdk.image.TemperatureUnit;
+import com.flir.thermalsdk.image.ThermalImage;
+import com.flir.thermalsdk.live.streaming.ThermalImageStreamListener;
+
+
+
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -14,10 +21,18 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.TextView;
 
+
+import com.flir.thermalsdk.image.Point;
+//import com.flir.thermalsdk.the
+import com.flir.thermalsdk.image.fusion.FusionMode;
+import com.flir.thermalsdk.image.palettes.Palette;
+import com.flir.thermalsdk.image.palettes.PaletteManager;
+import com.flir.thermalsdk.live.Camera;
 import com.google.mlkit.vision.face.Face;
 
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ThermalActivity extends AppCompatActivity {
 
@@ -33,6 +48,8 @@ public class ThermalActivity extends AppCompatActivity {
     private Rect visualAreaOfInterest;
     private Rect thermalAreaOfInterest;
     TextView word;
+    //private StreamDataListener streamDataListener;
+
 
 
     @Override
@@ -55,6 +72,7 @@ public class ThermalActivity extends AppCompatActivity {
         engine = new MeasurementEngine();
         visualAreaOfInterest = null;
         thermalAreaOfInterest = null;
+        AtomicBoolean bitmapFinished = new AtomicBoolean(false);
 
         // Listener
         CameraListener listener = (visualImage, thermalImage) -> {
@@ -100,14 +118,31 @@ public class ThermalActivity extends AppCompatActivity {
                     visualImageView.setImageBitmap(visualImage);
                     thermalImageView.setImageBitmap(thermalImage);
                     thermalImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                    //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    //word = (TextView) findViewById(R.id.test_view);
+                    String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    word = (TextView) findViewById(R.id.test_view);
 
-                    //if(encoded != null || encoded.equals("")){
-                      //  word.setText(byteArray.length);
-                    //} else {
-                      //  word.setText("null");
-                   // }
+                    Point pt = new Point(10, 10);
+                    //double temp = thermalImage.getValueAt(pt);
+                    //ThermalImage realImage = new ThermalImage();
+                   // if(bitmapFinished.get()){
+                     //   bitmapFinished.set(false);
+                        if(encoded != null || encoded.equals("")){
+
+                            int pixel = thermalImage.getPixel(thermalImage.getWidth() / 2, thermalImage.getHeight() / 2);
+                            String toString = Integer.toString(pixel);
+                            Color myColor = new Color();
+                            int redValue = Color.red(pixel);
+                            int blueValue = Color.blue(pixel);
+                            int greenValue = Color.green(pixel);
+
+
+
+                            word.setText(redValue + " " + blueValue + " " + greenValue);
+                        } else {
+                            word.setText("null");
+                        }
+                    //}
+
 
 
                 });
@@ -119,6 +154,11 @@ public class ThermalActivity extends AppCompatActivity {
 
         // Camera
         camera = new ThermalCamera(getApplicationContext(), listener);
+    }
+
+
+
+    public void startStream(){
     }
 
     public void start(View view) {
