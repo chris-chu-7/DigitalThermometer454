@@ -8,12 +8,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import com.google.mlkit.vision.face.Face;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class ThermalActivity extends AppCompatActivity {
@@ -29,6 +32,8 @@ public class ThermalActivity extends AppCompatActivity {
     private List<Face> faces;
     private Rect visualAreaOfInterest;
     private Rect thermalAreaOfInterest;
+    TextView word;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +73,7 @@ public class ThermalActivity extends AppCompatActivity {
                         float hScale = ((float) thermalImage.getWidth())/((float) visualImage.getWidth());
                         float vScale = ((float) thermalImage.getHeight())/((float) visualImage.getHeight());
 
+                        //sets up the area of interest from the left to the right.
                         thermalAreaOfInterest = new Rect();
                         thermalAreaOfInterest.left = (int) (hScale * (float) visualAreaOfInterest.left);
                         thermalAreaOfInterest.right = (int) (hScale * (float) visualAreaOfInterest.right);
@@ -88,8 +94,22 @@ public class ThermalActivity extends AppCompatActivity {
                 }
 
                 runOnUiThread(() -> {
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+                    byte[] byteArray = byteArrayOutputStream .toByteArray();
                     visualImageView.setImageBitmap(visualImage);
                     thermalImageView.setImageBitmap(thermalImage);
+                    thermalImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    //String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+                    //word = (TextView) findViewById(R.id.test_view);
+
+                    //if(encoded != null || encoded.equals("")){
+                      //  word.setText(byteArray.length);
+                    //} else {
+                      //  word.setText("null");
+                   // }
+
+
                 });
 
                 engineBreakCounter++;
@@ -102,6 +122,11 @@ public class ThermalActivity extends AppCompatActivity {
     }
 
     public void start(View view) {
+        word = (TextView) findViewById(R.id.test_view);
+        //word.setText("Hey this thing is starting now shake ya booty");
+
+
+
         camera.start();
     }
 
@@ -117,6 +142,8 @@ public class ThermalActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        word = (TextView) findViewById(R.id.test_view);
+        word.setText("Hey this thing is stopping now shake ya hips");
         super.onStop();
         camera.stop();
     }

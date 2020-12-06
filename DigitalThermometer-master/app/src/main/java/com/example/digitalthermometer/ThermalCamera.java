@@ -6,6 +6,9 @@ package com.example.digitalthermometer;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.widget.TextView;
+import android.view.View;
+
 
 import androidx.annotation.NonNull;
 
@@ -35,6 +38,7 @@ public class ThermalCamera {
 
     private boolean hardwareConnected = false;
     private boolean videoRunning = false;
+    TextView word;
 
     public ThermalCamera(Context appContext, CameraListener appListener) {
         // Save Context
@@ -63,6 +67,7 @@ public class ThermalCamera {
     }
 
     public void findHardware() {
+
         if(hardwareConnected) {
             return;
         }
@@ -71,6 +76,7 @@ public class ThermalCamera {
     }
 
     public void start() {
+        System.out.println("camera is starting now... ");
         if(videoRunning) {
             return;
         }
@@ -97,6 +103,11 @@ public class ThermalCamera {
                             Bitmap visual = BitmapAndroid.createBitmap(thermalImage.getImage()).getBitMap();
                             thermalImage.getFusion().setFusionMode(FusionMode.THERMAL_ONLY);
                             Bitmap thermal = BitmapAndroid.createBitmap(thermalImage.getImage()).getBitMap();
+                            System.out.println("Here is the bitmap " + thermal);
+                            //TextView text= (TextView)getView().findViewById(R.id.test_view);
+                            //word = (TextView) findViewById(R.id.test_view);
+
+                            //text.setText("Some text....");
                             videoListener.receive(visual, thermal);
                         }));
 
@@ -121,6 +132,7 @@ public class ThermalCamera {
     }
 
     public void stop() {
+
         if (!videoRunning || camera == null) {
             return;
         }

@@ -21,15 +21,22 @@
         android:contentDescription="@string/thermal_image" />
 
     <Button
+        android:id="@+id/testingView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/start"
-        android:onClick="start" />
+        android:onClick="start"
+        android:text="@string/start" />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/stop"
         android:onClick="stop" />
+
+    <TextView
+        android:id="@+id/test_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="trying to display bitmap here" />
 
 </LinearLayout>

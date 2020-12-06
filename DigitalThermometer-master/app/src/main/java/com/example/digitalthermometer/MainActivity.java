@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         thermalActivity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                System.out.println("Trying out to debug the thermal activity now...");
                 startActivity(new Intent(MainActivity.this, ThermalActivity.class));
             }
         });
