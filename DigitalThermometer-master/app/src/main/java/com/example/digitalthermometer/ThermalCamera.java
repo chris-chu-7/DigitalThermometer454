@@ -187,6 +187,8 @@ public class ThermalCamera {
     //==========================================//
     // initialize thermal image screen listener //
     //==========================================//
+
+    
     private final ThermalImageStreamListener thermalImageStreamListener = new ThermalImageStreamListener() {
         @Override
         public void onImageReceived() {
