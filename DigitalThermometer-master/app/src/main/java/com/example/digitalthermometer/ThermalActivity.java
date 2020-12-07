@@ -2,10 +2,8 @@ package com.example.digitalthermometer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.flir.thermalsdk.androidsdk.image.BitmapAndroid;
-import com.flir.thermalsdk.image.TemperatureUnit;
+
 import com.flir.thermalsdk.image.ThermalImage;
-import com.flir.thermalsdk.live.streaming.ThermalImageStreamListener;
 
 
 
@@ -15,8 +13,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
-import android.util.Base64;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -24,9 +20,7 @@ import android.widget.TextView;
 
 
 import com.flir.thermalsdk.image.Point;
-import com.flir.thermalsdk.image.fusion.FusionMode;
-import com.flir.thermalsdk.image.palettes.Palette;
-import com.flir.thermalsdk.image.palettes.PaletteManager;
+
 
 import com.flir.thermalsdk.live.Camera;
 import com.google.mlkit.vision.face.Face;
@@ -50,11 +44,13 @@ public class ThermalActivity extends AppCompatActivity{
     private List<Face> faces;
     private Rect visualAreaOfInterest;
     private Rect thermalAreaOfInterest;
-    TextView word;
+    public TextView word;
+    public ThermalImage thermalImages;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        word = findViewById(R.id.test_view);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_thermal);
 
@@ -121,6 +117,8 @@ public class ThermalActivity extends AppCompatActivity{
                     visualImageView.setImageBitmap(visualImage);
                     thermalImageView.setImageBitmap(thermalImage);
                     thermalImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+                    double temp = thermalImages.getValueAt(new Point(10, 10));
+                    System.out.println(temp);
                 });
 
                 engineBreakCounter++;
@@ -142,6 +140,8 @@ public class ThermalActivity extends AppCompatActivity{
 
 
     public void start(View view) {
+        word = findViewById(R.id.test_view);
+        word.setText("Starting the process now...");
         camera.start();
     }
 
@@ -157,8 +157,8 @@ public class ThermalActivity extends AppCompatActivity{
 
     @Override
     protected void onStop() {
-        word = (TextView) findViewById(R.id.test_view);
-        word.setText("Hey this thing is stopping now shake ya hips");
+        word = findViewById(R.id.test_view);
+        word.setText("Camera Stopping");
         super.onStop();
         camera.stop();
     }
