@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 
 import com.flir.thermalsdk.image.Point;
-//import com.flir.thermalsdk.the
 import com.flir.thermalsdk.image.fusion.FusionMode;
 import com.flir.thermalsdk.image.palettes.Palette;
 import com.flir.thermalsdk.image.palettes.PaletteManager;
@@ -36,7 +35,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ThermalActivity extends AppCompatActivity implements ThermalCamera.StreamDataListener{
+public class ThermalActivity extends AppCompatActivity{
 
     private static final String TAG = "ThermalActivity";
     private ImageView visualImageView;
@@ -52,18 +51,6 @@ public class ThermalActivity extends AppCompatActivity implements ThermalCamera.
     private Rect visualAreaOfInterest;
     private Rect thermalAreaOfInterest;
     TextView word;
-   // private final CameraHandle  StreamDataListener streamDataListener;
-
-    public ThermalCamera.StreamDataListener streamDataListener;
-
-
-
-
-
-
-    public int max(int i, int j){
-        return (i > j) ? i : j;
-    }
 
 
     @Override
@@ -113,11 +100,6 @@ public class ThermalActivity extends AppCompatActivity implements ThermalCamera.
                         thermalAreaOfInterest.top = (int) (vScale * (float) visualAreaOfInterest.top);
                         thermalAreaOfInterest.bottom = (int) (vScale * (float) visualAreaOfInterest.bottom);
 
-                        if((thermalAreaOfInterest.right + thermalAreaOfInterest.left) / 2 != 0 && (thermalAreaOfInterest.top + thermalAreaOfInterest.bottom) / 2 != 0){
-                            cameraMiddle[0] = max(cameraMiddle[0], (thermalAreaOfInterest.right + thermalAreaOfInterest.left) / 2);
-                            cameraMiddle[1] = max(cameraMiddle[1], (thermalAreaOfInterest.top + thermalAreaOfInterest.bottom) / 2);
-                        }
-
                     } else {
                         visualAreaOfInterest = null;
                         thermalAreaOfInterest = null;
@@ -139,32 +121,6 @@ public class ThermalActivity extends AppCompatActivity implements ThermalCamera.
                     visualImageView.setImageBitmap(visualImage);
                     thermalImageView.setImageBitmap(thermalImage);
                     thermalImage.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-                    String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
-                    word = (TextView) findViewById(R.id.test_view);
-
-                    Point pt = new Point(10, 10);
-                    //double temp = thermalImage.getValueAt(pt);
-                    //ThermalImage realImage = new ThermalImage();
-                   // if(bitmapFinished.get()){
-                     //   bitmapFinished.set(false);
-                        if(encoded != null || encoded.equals("")){
-
-                            int pixel = thermalImage.getPixel(thermalImage.getWidth() / 2, thermalImage.getHeight() / 2);
-                            String toString = Integer.toString(pixel);
-                            Color myColor = new Color();
-                            //ThermalImage bit = new ThermalImage(thermalImageView);
-                            int redValue = Color.red(pixel);
-                            int blueValue = Color.blue(pixel);
-                            int greenValue = Color.green(pixel);
-                            word.setText(redValue + " " + blueValue + " " + greenValue);
-
-                        } else {
-                            word.setText("null");
-                        }
-                    //}
-
-
-
                 });
 
                 engineBreakCounter++;
@@ -180,51 +136,12 @@ public class ThermalActivity extends AppCompatActivity implements ThermalCamera.
      * Called whenever there is a new Thermal Image available, should be used in conjunction with {@link Camera.Consumer}
      */
 
-    /*
-    private final ThermalImageStreamListener thermalImageStreamListener = new ThermalImageStreamListener() {
-        @Override
-        public void onImageReceived() {
-            //Will be called on a non-ui thread
-            Log.d(TAG, "onImageReceived(), we got another ThermalImage");
-            withImage(this, handleIncomingImage);
-        }
-    };*/
 
-    @Deprecated
-    private void withImage(ThermalImageStreamListener listener, Camera.Consumer<ThermalImage> functionToRun) {
-        cameras.withImage(listener, functionToRun);
-    }
 
-    private void withImage(Camera.Consumer<ThermalImage> functionToRun){
-        cameras.withImage(functionToRun);
-    }
 
-    private final ThermalImageStreamListener thermalImageStreamListener = new ThermalImageStreamListener() {
-        @Override
-        public void onImageReceived() {
-            Log.d(TAG, "onImageReceived(), we got another ThermalImage");
-            cameras.withImage(this, handleIncomingImage);
-        }
-    };
 
-    public void startStream(StreamDataListener listener){
-        this.streamDataListener = listener;
-        word = (TextView) findViewById(R.id.test_view);
-        word.setText("The stream is starting, and this is a test.");
-
-        cameras.subscribeStream(thermalImageStreamListener);
-    }
-
-    public void stopStream(){
-
-    }
 
     public void start(View view) {
-        word = (TextView) findViewById(R.id.test_view);
-        //word.setText("Hey this thing is starting now shake ya booty");
-
-
-
         camera.start();
     }
 
@@ -252,20 +169,7 @@ public class ThermalActivity extends AppCompatActivity implements ThermalCamera.
         engine.stop();
     }
 
-    private final Camera.Consumer<ThermalImage> handleIncomingImage = new Camera.Consumer<ThermalImage>() {
-        @Override
-        public void accept(ThermalImage thermalImage) {
-            word = (TextView) findViewById(R.id.test_view);
-            word.setText("Image Consuming...");
 
-            try{
-
-
-            } catch (Exception e){
-                
-            }
-        }
-    };
 
     /**
      * Shows a {@link Toast} on the UI thread.
@@ -280,8 +184,5 @@ public class ThermalActivity extends AppCompatActivity implements ThermalCamera.
         });
     }
 
-    @Override
-    public void streamTempData(double tempAtCenter) {
-        System.out.println("Is this a joke? Lol!");
-    }
+
 }
