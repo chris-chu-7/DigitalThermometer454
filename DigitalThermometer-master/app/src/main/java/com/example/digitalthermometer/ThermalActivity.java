@@ -28,6 +28,7 @@ import com.flir.thermalsdk.image.Point;
 import com.flir.thermalsdk.image.fusion.FusionMode;
 import com.flir.thermalsdk.image.palettes.Palette;
 import com.flir.thermalsdk.image.palettes.PaletteManager;
+
 import com.flir.thermalsdk.live.Camera;
 import com.google.mlkit.vision.face.Face;
 
@@ -35,7 +36,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class ThermalActivity extends AppCompatActivity {
+public class ThermalActivity extends AppCompatActivity implements ThermalCamera.StreamDataListener{
 
     private static final String TAG = "ThermalActivity";
     private ImageView visualImageView;
@@ -53,12 +54,9 @@ public class ThermalActivity extends AppCompatActivity {
     TextView word;
    // private final CameraHandle  StreamDataListener streamDataListener;
 
-    public StreamDataListener streamDataListener;
+    public ThermalCamera.StreamDataListener streamDataListener;
 
 
-    public interface StreamDataListener {
-        void streamTempData(double tempAtCenter);
-    }
 
 
 
@@ -66,6 +64,8 @@ public class ThermalActivity extends AppCompatActivity {
     public int max(int i, int j){
         return (i > j) ? i : j;
     }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -203,12 +203,15 @@ public class ThermalActivity extends AppCompatActivity {
         @Override
         public void onImageReceived() {
             Log.d(TAG, "onImageReceived(), we got another ThermalImage");
-            withImage(handleIncomingImage);
+            cameras.withImage(this, handleIncomingImage);
         }
     };
 
     public void startStream(StreamDataListener listener){
         this.streamDataListener = listener;
+        word = (TextView) findViewById(R.id.test_view);
+        word.setText("The stream is starting, and this is a test.");
+
         cameras.subscribeStream(thermalImageStreamListener);
     }
 
@@ -277,4 +280,8 @@ public class ThermalActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void streamTempData(double tempAtCenter) {
+        System.out.println("Is this a joke? Lol!");
+    }
 }

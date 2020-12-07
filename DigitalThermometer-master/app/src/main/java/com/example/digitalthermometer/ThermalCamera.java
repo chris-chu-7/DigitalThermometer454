@@ -40,7 +40,14 @@ public class ThermalCamera {
     private boolean videoRunning = false;
     TextView word;
 
+    public interface StreamDataListener {
+        void streamTempData(double tempAtCenter);
+    }
+
     public ThermalCamera(Context appContext, CameraListener appListener) {
+
+
+
         // Save Context
         context = appContext;
 
@@ -103,7 +110,7 @@ public class ThermalCamera {
                             Bitmap visual = BitmapAndroid.createBitmap(thermalImage.getImage()).getBitMap();
                             thermalImage.getFusion().setFusionMode(FusionMode.THERMAL_ONLY);
                             Bitmap thermal = BitmapAndroid.createBitmap(thermalImage.getImage()).getBitMap();
-                            System.out.println("Here is the bitmap " + thermal);
+                            //System.out.println("Here is the bitmap " + thermal);
                             //TextView text= (TextView)getView().findViewById(R.id.test_view);
                             //word = (TextView) findViewById(R.id.test_view);
 
