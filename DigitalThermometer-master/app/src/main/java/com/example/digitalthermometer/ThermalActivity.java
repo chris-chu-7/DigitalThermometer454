@@ -16,6 +16,7 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -36,11 +37,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class ThermalActivity extends AppCompatActivity {
 
+    private static final String TAG = "ThermalActivity";
     private ImageView visualImageView;
     private ImageView thermalImageView;
 
 
     private ThermalCamera camera;
+    private Camera cameras;
     private MeasurementEngine engine;
     private boolean engineBusy = false;
     private int engineBreakCounter = 0;
@@ -48,10 +51,21 @@ public class ThermalActivity extends AppCompatActivity {
     private Rect visualAreaOfInterest;
     private Rect thermalAreaOfInterest;
     TextView word;
-    //private StreamDataListener streamDataListener;
+   // private final CameraHandle  StreamDataListener streamDataListener;
+
+    public StreamDataListener streamDataListener;
+
+
+    public interface StreamDataListener {
+        void streamTempData(double tempAtCenter);
+    }
 
 
 
+
+    public int max(int i, int j){
+        return (i > j) ? i : j;
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +96,7 @@ public class ThermalActivity extends AppCompatActivity {
 
             new Thread(() -> {
                 engineBusy = true;
+                int[] cameraMiddle = new int[2];
 
                 if(engineBreakCounter % 10 == 0) {
                     faces = engine.findFaces(visualImage);
@@ -97,6 +112,12 @@ public class ThermalActivity extends AppCompatActivity {
                         thermalAreaOfInterest.right = (int) (hScale * (float) visualAreaOfInterest.right);
                         thermalAreaOfInterest.top = (int) (vScale * (float) visualAreaOfInterest.top);
                         thermalAreaOfInterest.bottom = (int) (vScale * (float) visualAreaOfInterest.bottom);
+
+                        if((thermalAreaOfInterest.right + thermalAreaOfInterest.left) / 2 != 0 && (thermalAreaOfInterest.top + thermalAreaOfInterest.bottom) / 2 != 0){
+                            cameraMiddle[0] = max(cameraMiddle[0], (thermalAreaOfInterest.right + thermalAreaOfInterest.left) / 2);
+                            cameraMiddle[1] = max(cameraMiddle[1], (thermalAreaOfInterest.top + thermalAreaOfInterest.bottom) / 2);
+                        }
+
                     } else {
                         visualAreaOfInterest = null;
                         thermalAreaOfInterest = null;
@@ -131,13 +152,12 @@ public class ThermalActivity extends AppCompatActivity {
                             int pixel = thermalImage.getPixel(thermalImage.getWidth() / 2, thermalImage.getHeight() / 2);
                             String toString = Integer.toString(pixel);
                             Color myColor = new Color();
+                            //ThermalImage bit = new ThermalImage(thermalImageView);
                             int redValue = Color.red(pixel);
                             int blueValue = Color.blue(pixel);
                             int greenValue = Color.green(pixel);
-
-
-
                             word.setText(redValue + " " + blueValue + " " + greenValue);
+
                         } else {
                             word.setText("null");
                         }
@@ -156,9 +176,44 @@ public class ThermalActivity extends AppCompatActivity {
         camera = new ThermalCamera(getApplicationContext(), listener);
     }
 
+    /**
+     * Called whenever there is a new Thermal Image available, should be used in conjunction with {@link Camera.Consumer}
+     */
 
+    /*
+    private final ThermalImageStreamListener thermalImageStreamListener = new ThermalImageStreamListener() {
+        @Override
+        public void onImageReceived() {
+            //Will be called on a non-ui thread
+            Log.d(TAG, "onImageReceived(), we got another ThermalImage");
+            withImage(this, handleIncomingImage);
+        }
+    };*/
 
-    public void startStream(){
+    @Deprecated
+    private void withImage(ThermalImageStreamListener listener, Camera.Consumer<ThermalImage> functionToRun) {
+        cameras.withImage(listener, functionToRun);
+    }
+
+    private void withImage(Camera.Consumer<ThermalImage> functionToRun){
+        cameras.withImage(functionToRun);
+    }
+
+    private final ThermalImageStreamListener thermalImageStreamListener = new ThermalImageStreamListener() {
+        @Override
+        public void onImageReceived() {
+            Log.d(TAG, "onImageReceived(), we got another ThermalImage");
+            withImage(handleIncomingImage);
+        }
+    };
+
+    public void startStream(StreamDataListener listener){
+        this.streamDataListener = listener;
+        cameras.subscribeStream(thermalImageStreamListener);
+    }
+
+    public void stopStream(){
+
     }
 
     public void start(View view) {
@@ -193,6 +248,21 @@ public class ThermalActivity extends AppCompatActivity {
         super.onDestroy();
         engine.stop();
     }
+
+    private final Camera.Consumer<ThermalImage> handleIncomingImage = new Camera.Consumer<ThermalImage>() {
+        @Override
+        public void accept(ThermalImage thermalImage) {
+            word = (TextView) findViewById(R.id.test_view);
+            word.setText("Image Consuming...");
+
+            try{
+
+
+            } catch (Exception e){
+                
+            }
+        }
+    };
 
     /**
      * Shows a {@link Toast} on the UI thread.
